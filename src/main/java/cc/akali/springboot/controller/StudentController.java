@@ -2,8 +2,7 @@ package cc.akali.springboot.controller;
 
 
 import cc.akali.springboot.entity.Student;
-import cc.akali.springboot.entity.Teacher;
-import cc.akali.springboot.entity.vo.teacher.StudentQuery;
+import cc.akali.springboot.entity.vo.student.StudentQuery;
 import cc.akali.springboot.service.StudentService;
 import cc.akali.springboot.utils.Result;
 import io.swagger.annotations.Api;

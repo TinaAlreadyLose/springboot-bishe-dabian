@@ -1,9 +1,7 @@
 package cc.akali.springboot.service.impl;
 
 import cc.akali.springboot.entity.Student;
-import cc.akali.springboot.entity.Teacher;
-import cc.akali.springboot.entity.vo.teacher.StudentQuery;
-import cc.akali.springboot.entity.vo.teacher.TeacherQuery;
+import cc.akali.springboot.entity.vo.student.StudentQuery;
 import cc.akali.springboot.mapper.StudentMapper;
 import cc.akali.springboot.service.StudentService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -11,7 +9,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.HashMap;
 import java.util.List;

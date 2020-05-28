@@ -41,7 +41,7 @@ INSERT INTO `classes` VALUES ('3', 'class1', '1', 0, 0, NULL, NULL);
 INSERT INTO `classes` VALUES ('4', 'class2', '2', 0, 0, NULL, NULL);
 
 -- ----------------------------
--- Table structure for grade
+-- Table structure for GradeQuery
 -- ----------------------------
 DROP TABLE IF EXISTS `grade`;
 CREATE TABLE `grade`  (
@@ -57,7 +57,7 @@ CREATE TABLE `grade`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of grade
+-- Records of GradeQuery
 -- ----------------------------
 INSERT INTO `grade` VALUES ('1', 80.00, '1', '1', 0, 0, NULL, NULL);
 INSERT INTO `grade` VALUES ('10', 86.00, '4', '3', 0, 0, NULL, NULL);

@@ -1,4 +1,4 @@
-package cc.akali.springboot.entity.vo.teacher;
+package cc.akali.springboot.entity.vo.student;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

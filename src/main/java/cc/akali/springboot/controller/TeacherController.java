@@ -2,10 +2,14 @@ package cc.akali.springboot.controller;
 
 
 import cc.akali.springboot.entity.Teacher;
+import cc.akali.springboot.entity.po.GradeQuery;
+import cc.akali.springboot.entity.po.GradeQueryParent;
+import cc.akali.springboot.entity.po.GradeStudent;
 import cc.akali.springboot.entity.vo.teacher.Caption;
 import cc.akali.springboot.entity.vo.teacher.TeacherQuery;
 import cc.akali.springboot.service.TeacherService;
 import cc.akali.springboot.utils.Result;
+import com.sun.xml.internal.ws.developer.StreamingAttachment;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -103,13 +107,28 @@ public class TeacherController {
             return Result.ok().data("teacher", teacher);
         } else return Result.error();
     }
+
+    //
+    @ApiOperation(value = "根据教师id查询其评价所有学生的成绩")
+    @GetMapping("memberFindGrad/{id}")
+    public Result memberFindStuGrade(@ApiParam(value = "教师成员id") @PathVariable String id) {
+       GradeQuery<GradeStudent> result= teacherService.getByMemberId(id);
+        return Result.ok().data("result",result);
+    }
+    @ApiOperation(value = "教师组长查询其成员评价的成绩")
+    @GetMapping("captionFindGrad/{id}")
+    public Result captionFindStuGrade(@ApiParam(value = "教师组长id") @PathVariable String id) {
+        GradeQueryParent<GradeQuery<GradeStudent>> result = teacherService.getByCaptionId(id);
+        return Result.ok().data("result",result);
+    }
+
     //TODO 把所有的数据导出到excel
     //修改
     @ApiOperation(value = "根据教师id修改")
     @PutMapping("updateTeacher/{id}")
-    public Result updateTeacher(@ApiParam(value = "讲师id")@PathVariable  String id,@ApiParam(value = "修改教师的内容,name,parent_id选填")@RequestBody Teacher teacher) {
+    public Result updateTeacher(@ApiParam(value = "讲师id") @PathVariable String id, @ApiParam(value = "修改教师的内容,name,parent_id选填") @RequestBody Teacher teacher) {
         teacher.setId(id);
-        if(teacherService.updateById(teacher))
+        if (teacherService.updateById(teacher))
             return Result.ok();
         else return Result.error();
     }

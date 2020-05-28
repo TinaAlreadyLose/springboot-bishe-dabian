@@ -63,5 +63,14 @@ public class ClassesController {
             return Result.ok().data("teacher", classes);
         } else return Result.error();
     }
+    //改
+    @ApiOperation(value = "根据id修改班级的信息")
+    @PutMapping("updateStudent/{id}")
+    public Result updateStudentById(@ApiParam(value = "班级id") @PathVariable String id, @ApiParam("修改班级信息")@RequestBody Classes classes) {
+        classes.setId(id);
+        if(classesService.updateById(classes))
+            return Result.ok();
+        else return Result.error();
+    }
 }
 

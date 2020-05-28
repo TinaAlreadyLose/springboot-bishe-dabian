@@ -67,7 +67,7 @@ class SpringbootApplicationTests {
 
         //4、策略配置
         StrategyConfig strategy = new StrategyConfig();
-        strategy.setInclude("teacher","student","group","grade","classes"); // 设置要映射的表名
+        strategy.setInclude("teacher","student","group","GradeQuery","classes"); // 设置要映射的表名
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         strategy.setEntityLombokModel(true); // 自动lombok；
