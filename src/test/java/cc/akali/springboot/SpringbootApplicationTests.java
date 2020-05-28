@@ -88,5 +88,13 @@ class SpringbootApplicationTests {
         mpg.execute(); //执行
     }
 
+    @Test
+    public void Url() {
+        String projectPath = System.getProperty("user.dir");
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        String filePath=projectPath+"\\cc\\akali\\springboot\\resources\\static\\excel\\";
+        String fileName=uuid+".xls";
+        System.out.println(filePath+fileName);
+    }
 
 }

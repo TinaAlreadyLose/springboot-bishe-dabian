@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,13 @@ public class StudentController {
         else return Result.error();
     }
 
-    //TODO 通过excel批量给学生添加信息
+    @PostMapping("addByExcel")
+    @ApiOperation(value = "通过excel批量添加学生信息")
+    public Result addByExcel(MultipartFile file) {
+        if(studentService.saveByExcel(file, studentService))
+            return Result.ok();
+        else return Result.error();
+    }
     //删
     @ApiOperation(value = "根据学生id删除信息")
     @DeleteMapping("remove/{id}")
@@ -80,7 +87,14 @@ public class StudentController {
             return Result.ok().data("teacher", student);
         } else return Result.error();
     }
-    //TODO 将学生信息导出到excel
+    @ApiOperation(value = "把教师的数据导出到excel")
+    @GetMapping("download")
+    public Result download()  {
+        String url=studentService.downLoad();
+        if(url!=null)
+            return Result.ok().data("url", url);
+        else return Result.error();
+    }
     //改
     @ApiOperation(value = "根据id修改学生的信息")
     @PutMapping("updateStudent/{id}")

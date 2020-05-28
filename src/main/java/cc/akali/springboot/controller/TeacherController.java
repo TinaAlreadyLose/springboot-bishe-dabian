@@ -16,7 +16,10 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +55,14 @@ public class TeacherController {
             return Result.ok();
         else return Result.error();
     }
-    //TODO 通过excel批量添加教师
+
+    @PostMapping("addByExcel")
+    @ApiOperation(value = "通过excel批量添加教师")
+    public Result addByExcel(MultipartFile file) {
+        if(teacherService.saveByExcel(file, teacherService))
+            return Result.ok();
+        else return Result.error();
+    }
 
     //删除
     @ApiOperation(value = "根据id删除教师")
@@ -108,7 +118,6 @@ public class TeacherController {
         } else return Result.error();
     }
 
-    //
     @ApiOperation(value = "根据教师id查询其评价所有学生的成绩")
     @GetMapping("memberFindGrad/{id}")
     public Result memberFindStuGrade(@ApiParam(value = "教师成员id") @PathVariable String id) {
@@ -122,7 +131,14 @@ public class TeacherController {
         return Result.ok().data("result",result);
     }
 
-    //TODO 把所有的数据导出到excel
+    @ApiOperation(value = "把教师的数据导出到excel")
+    @GetMapping("download")
+    public Result download()  {
+        String url=teacherService.downLoad();
+        if(url!=null)
+            return Result.ok().data("url", url);
+        else return Result.error();
+    }
     //修改
     @ApiOperation(value = "根据教师id修改")
     @PutMapping("updateTeacher/{id}")

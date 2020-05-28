@@ -1,18 +1,25 @@
 package cc.akali.springboot.service.impl;
 
 import cc.akali.springboot.entity.Student;
+import cc.akali.springboot.entity.Teacher;
+import cc.akali.springboot.entity.excel.StudentExcel;
+import cc.akali.springboot.entity.excel.TeacherExcel;
 import cc.akali.springboot.entity.vo.student.StudentQuery;
+import cc.akali.springboot.listener.StudentListener;
+import cc.akali.springboot.listener.TeacherListener;
 import cc.akali.springboot.mapper.StudentMapper;
 import cc.akali.springboot.service.StudentService;
+import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.InputStream;
+import java.util.*;
 
 /**
  * <p>
@@ -50,4 +57,36 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         map.put("records", records);
         return map;
     }
+
+    @Override
+    public boolean saveByExcel(MultipartFile file, StudentService studentService) {
+        try{
+            InputStream inputStream = file.getInputStream();
+            EasyExcel.read(inputStream, StudentExcel.class, new StudentListener(studentService)).sheet().doRead();
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    @Override
+    public String downLoad() {
+        String projectPath = System.getProperty("user.dir");
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        String filePath=projectPath+"\\src\\main\\resources\\static\\excel\\";
+        String fileName=uuid+".xls";
+        EasyExcel.write(filePath + fileName, StudentExcel.class).sheet("学生表").doWrite(this.getData());
+        return filePath + fileName;
+    }
+    private List<StudentExcel>getData(){
+        List<Student> studentList=this.list(null);
+        List<StudentExcel> studentExcelList = new ArrayList<>();
+        for (Student student : studentList) {
+            StudentExcel studentExcel = new StudentExcel();
+            BeanUtils.copyProperties(student,studentExcel);
+            studentExcelList.add(studentExcel);
+        }
+        return studentExcelList;
+    }
+
 }

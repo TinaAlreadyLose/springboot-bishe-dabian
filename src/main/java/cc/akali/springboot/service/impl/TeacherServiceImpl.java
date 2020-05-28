@@ -2,15 +2,18 @@ package cc.akali.springboot.service.impl;
 
 import cc.akali.springboot.entity.Grade;
 import cc.akali.springboot.entity.Teacher;
+import cc.akali.springboot.entity.excel.TeacherExcel;
 import cc.akali.springboot.entity.po.GradeQuery;
 import cc.akali.springboot.entity.po.GradeQueryParent;
 import cc.akali.springboot.entity.po.GradeStudent;
 import cc.akali.springboot.entity.vo.teacher.Caption;
 import cc.akali.springboot.entity.vo.teacher.Member;
 import cc.akali.springboot.entity.vo.teacher.TeacherQuery;
+import cc.akali.springboot.listener.TeacherListener;
 import cc.akali.springboot.mapper.TeacherMapper;
 import cc.akali.springboot.service.GradeService;
 import cc.akali.springboot.service.TeacherService;
+import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -19,11 +22,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.*;
 
 /**
  * <p>
@@ -121,5 +124,36 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> impl
         }
         result.setChildren(gradeQueryList);
         return result;
+    }
+
+    @Override
+    public boolean saveByExcel(MultipartFile file, TeacherService teacherService) {
+        try{
+            InputStream inputStream = file.getInputStream();
+            EasyExcel.read(inputStream, TeacherExcel.class, new TeacherListener(teacherService)).sheet().doRead();
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    @Override
+    public String downLoad()  {
+        String projectPath = System.getProperty("user.dir");
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        String filePath=projectPath+"\\src\\main\\resources\\static\\excel\\";
+        String fileName=uuid+".xls";
+        EasyExcel.write(filePath + fileName, TeacherExcel.class).sheet("教师表").doWrite(this.getData());
+        return filePath + fileName;
+    }
+    private List<TeacherExcel>getData(){
+        List<Teacher> teacherList=this.list(null);
+        List<TeacherExcel> teacherExcelList = new ArrayList<>();
+        for (Teacher teacher : teacherList) {
+            TeacherExcel teacherExcel = new TeacherExcel();
+            BeanUtils.copyProperties(teacher,teacherExcel);
+            teacherExcelList.add(teacherExcel);
+        }
+        return teacherExcelList;
     }
 }

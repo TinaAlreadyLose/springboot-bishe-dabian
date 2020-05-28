@@ -7,6 +7,7 @@ import cc.akali.springboot.entity.po.GradeStudent;
 import cc.akali.springboot.entity.vo.teacher.Caption;
 import cc.akali.springboot.entity.vo.teacher.TeacherQuery;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -28,4 +29,8 @@ public interface TeacherService extends IService<Teacher> {
     GradeQuery<GradeStudent> getByMemberId(String id);
 
     GradeQueryParent<GradeQuery<GradeStudent>> getByCaptionId(String id);
+
+    boolean saveByExcel(MultipartFile file, TeacherService teacherService);
+
+    String downLoad();
 }
